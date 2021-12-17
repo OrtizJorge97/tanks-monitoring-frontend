@@ -66,7 +66,8 @@ export default function LogInPage() {
       let responseTextMessage = "";
       let responseMsgTextColor = "#000000";
       let userAuthenticated = false;
-      
+      console.log("LOG TO UPLOAD PROJECT IN OTHER BRANCH");
+      console.log("COMMIT FOR DEV DEV")
       setValues({
         ...values,
         emailError: emailError,
