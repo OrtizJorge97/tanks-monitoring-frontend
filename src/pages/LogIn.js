@@ -124,13 +124,13 @@ export default function LogInPage() {
           }); 
           navigate("/bar-chart");
         }
-
+        /*
         if(!userAuthenticated) {
           setBusyProps({
             progressVisibility: "none",
             disabledButton: false
           }); 
-        }
+        }*/
 
         
       }
@@ -142,15 +142,13 @@ export default function LogInPage() {
       }
     }
     catch(error) {
-      console.log(typeof(error));
-      console.log(error.message);
       if(error.message === 'Failed to fetch') {
         setBusyProps({
           progressVisibility: "none",
           disabledButton: false,
           responseTextMessage: "Please check your internet connection and try again",
           responseMsgTextColor: ""
-        })
+        });
       }
     }
 
@@ -185,11 +183,10 @@ export default function LogInPage() {
                 endAdornment={
                 <InputAdornment position="end">
                     <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={(e) => handleMouseDownPassword(e)}
-                    edge="end"
-                    >
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={(e) => handleMouseDownPassword(e)}
+                      edge="end">
                     {values.showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                 </InputAdornment>
