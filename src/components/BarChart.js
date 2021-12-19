@@ -127,12 +127,21 @@ function BarChart() {
 				notificationType: "success",
 			});
 
+<<<<<<< HEAD
 			console.log("email " + jsonData.email);
             console.log("name " + jsonData.name);
             if(jsonData.email) {
                 socket.emit("join_user_sessionid", {
                     email: jsonData.email,
                     company: jsonData.company,
+=======
+			console.log("email " + user.email);
+            console.log("name " + user.name);
+            if(jsonData) {
+                socket.emit("join_user_sessionid", {
+                    email: user.email,
+                    company: user.company,
+>>>>>>> dev
                 });
             }
 		});
