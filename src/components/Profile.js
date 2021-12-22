@@ -94,10 +94,8 @@ export default function Profile() {
 				const response = await GET(apiModes.GETUSER, true, {
 					accessToken: localStorage.getItem("accessToken"),
 				});
-				const jsonData = await response.json();
-				console.log(response.status);
-				console.log(jsonData.msg);
 
+				const jsonData = await response.json();
 				if (jsonData.msg === "Succesfully authenticated") {
 					setLocalUser({
 						name: jsonData.name,
@@ -124,7 +122,6 @@ export default function Profile() {
 					navigate("/log-in");
 				}
 			} catch (error) {
-				console.log(error.message);
                 setComponentState({
                     notificationMessage: "Could not stablish connection :(",
                     notificationType: "error",

@@ -12,6 +12,7 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 
+import ChartComponent from "./ChartComponent";
 import { socketApiRoute } from "../api/ApiProperties";
 import { UserContext } from "./Context";
 import { GET } from "../api/Get";
@@ -25,32 +26,6 @@ const categories = ["Water Level", "%Oxygen", "Ph"];
 const dataFromServerDummy = {
 	tanks: ["MT001", "MT002", "MT003", "MT004", "MT005"],
 	data: [10, 5, 2, 6, 8]
-}
-var data = {
-	labels: dataFromServerDummy.tanks,
-	datasets: [
-		{
-			label: "",
-			backgroundColor: [
-				"rgb(255, 99, 132)",
-				"rgb(54, 99, 132)",
-				"rgb(54, 99, 43)",
-				"rgb(54, 99, 43)",
-				"rgb(54, 99, 43)",
-			],
-			borderColor: "rgb(255, 99, 132)",
-			data: dataFromServerDummy.data,
-		},
-	],
-};
-var options = {
-	indexAxis: 'y',
-	scales: {
-		y: {
-			min: 0,
-			max: 200,
-		},
-	},
 };
 const Item = styled(Paper)(({ theme }) => ({
 	...theme.typography.body2,
@@ -69,6 +44,14 @@ function BarChart() {
 	const navigate = useNavigate();
 	const { user, setUser } = useContext(UserContext);
 	const [open, setOpen] = useState(false);
+	const [tanksSelected, setTanksSelected] = useState([]);
+	const [tanksData, setTanksData] = useState({
+		id: [],
+		company: "",
+		WtrLvl: [],
+		OxPercentage: [],
+		Ph: []
+	});
     const [localUser, setLocalUser] = useState({
         name: "",
         lastName: "",
@@ -80,51 +63,35 @@ function BarChart() {
 		notificationMessage: "",
 		notificationType: "",
 	});
-	const [graph, setGraph] = useState({
-		labels: dataFromServerDummy.tanks,
-		data: data,
-		options: options,
+	const [scaleRanges, setScaleRanges] = useState({
+		min: 0,
+		max: 500
 	});
-	const [checked, setChecked] = React.useState([0]);
-	/*
-	const updateGraph = (event) => {
-		if (event.target.value === labels[0]) {
+	const [category, setCategory] = useState("Water Level");
+	
+	const updateScale = (event) => {
+		let minScale = 0;
+		let maxScale = 0;
+		if (event.target.value === 'Water Level') {
 			console.log("selected water level");
-			options = {
-				scales: {
-					y: {
-						min: 0,
-						max: 200,
-					},
-				},
-			};
-		} else if (event.target.value === labels[1]) {
+			minScale = 0;
+			maxScale = 500;
+		} else if (event.target.value === '%Oxygen') {
 			console.log("selected % Oxygen");
-			options = {
-				scales: {
-					y: {
-						min: 0,
-						max: 100,
-					},
-				},
-			};
-		} else if (event.target.value === labels[2]) {
+			minScale = 0;
+			maxScale = 100;
+		} else if (event.target.value === 'Ph') {
 			console.log("selected Ph");
-			options = {
-				scales: {
-					y: {
-						min: 0,
-						max: 14,
-					},
-				},
-			};
+			minScale = 0;
+			maxScale = 14;
 		}
-
-		setGraph({
-			...graph,
-			options: options,
+		//update min scale and max scale to pass to chart component
+		setScaleRanges({
+			min: minScale,
+			max: maxScale
 		});
-	};*/
+		setCategory(event.target.value);
+	};
 
 	const handleClose = (event, reason) => {
 		if (reason === "clickaway") {
@@ -133,12 +100,11 @@ function BarChart() {
 
 		setOpen(false);
 	};
-	const updateChart = (tanksSelected) => {
-		console.log(dataFromServerDummy.tanks);
-		console.log(dataFromServerDummy.data);
+	const updateTanksSelected = async(tanksSelected) => {
+		//console.log("tanks selected!!");
+		//onsole.log(tanksSelected);
+		setTanksSelected(tanksSelected);
 	};
-
-
 
 	const stablishSocketConnection = (jsonData) => {
 		var socket = socketIOClient(ENDPOINT);
@@ -166,8 +132,13 @@ function BarChart() {
 			console.log("message from server conection: " + msj.message);
 		});
 		socket.on('tanks_data', (data) => {
-			alert("t kgas wey");
-			console.log(data);
+			setTanksData({
+				id: data.id,
+				company: data.company,
+				WtrLvl: data.WtrLvl,
+				OxPercentage: data.OxPercentage,
+				Ph: data.Ph
+			});
 		});
         socket.on('connect_error', err => console.log('connect_error: ' + err.message))
         socket.on('connect_failed', err => console.log('connect_failed: ' + err.message))
@@ -231,7 +202,12 @@ function BarChart() {
             }
 
 		}
-		stablishConnection();
+		if(!socket) {
+			stablishConnection();
+		}
+		else {
+			
+		}
 		return () => {
 			if (socket) {
 				socket.close();
@@ -248,11 +224,11 @@ function BarChart() {
 					<RadioGroup
 						row={true}
 						aria-label='gender'
-						defaultValue={categories[0]}
+						defaultValue={"Water Level"}
 						name='radio-buttons-group'
 						onChange={(e) => {
 							console.log(e.target.value);
-							//updateGraph(e);
+							updateScale(e);
 						}}>
 						<FormControlLabel
 							value={categories[0]}
@@ -281,11 +257,15 @@ function BarChart() {
 				<div>
 					<h3>Select tanks to display (MAX 5)</h3>
 					<TanksList 
-						tanks={dataFromServerDummy.tanks}
-						updateChart={updateChart}/>
+						allTanks={dataFromServerDummy.tanks}
+						updateTanksSelected={updateTanksSelected}/>
 				</div>
 				<div style={{width: "60%", marginLeft: "15px"}}>
-					<Bar data={graph.data} options={options} />
+					<ChartComponent 
+						scaleRanges={scaleRanges}
+						tanksSelected={tanksSelected}
+						tanksData={tanksData}
+						category={category}/>
 				</div>
 			</Stack>
 			<Snackbar

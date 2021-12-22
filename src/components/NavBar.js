@@ -103,16 +103,19 @@ export default function NavBar() {
       </List>
     </Box>
   );
-  console.log(user.access_token);
+
   return (
     <Box 
-      sx={{ flexGrow: 1 }} 
-      style={{position: 'fixed',
-              top: 0,
-              right: 0,
-              width: '100%',
-              zIndex: 1
-              }}>
+      bgcolor="#FFFFFF"
+      sx={{ 
+        flexGrow: 1
+      }} 
+      style={{
+        position: 'fixed',
+        top: 0,
+        right: 0,
+        width: '100%',
+        zIndex: 1}}>
       <AppBar position="static">
         <Toolbar>
         {(user.access_token || localStorage.getItem("accessToken"))? (
@@ -123,7 +126,7 @@ export default function NavBar() {
             aria-label="menu"
             sx={{ mr: 2 }}
             onClick={toggleDrawer("left", true)}>
-            <MenuIcon/>
+            <MenuIcon style={{color: "black", fontSize: "40px"}}/>
           </IconButton>
         ) : null}
           <Drawer

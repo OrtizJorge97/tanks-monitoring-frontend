@@ -5,12 +5,10 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import CommentIcon from '@mui/icons-material/Comment';
 
 export default function TanksList(props) {
   const [checked, setChecked] = React.useState([0]);
-  const { tanks, updateChart } = props;
+  const { allTanks, updateTanksSelected } = props;
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -21,13 +19,18 @@ export default function TanksList(props) {
     } else {
       newChecked.splice(currentIndex, 1);
     }
-    updateChart(newChecked);
+    
+    if(newChecked.indexOf(0) !== -1) {
+      newChecked.splice(newChecked.indexOf(0), 1);
+    }
+    
+    updateTanksSelected(newChecked);
     setChecked(newChecked);
   };
-  console.log("tanks data: " + tanks);
+  
   return (
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      {tanks.map((value) => {
+      {allTanks.map((value) => {
         const labelId = `checkbox-list-label-${value}`;
 
         return (
