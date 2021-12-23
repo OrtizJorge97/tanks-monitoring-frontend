@@ -24,6 +24,39 @@ import {
 
 import { UserContext, NavigationContext } from './Context';
 
+function stringToColor(string) {
+	let hash = 0;
+	let i;
+
+	/* eslint-disable no-bitwise */
+	for (i = 0; i < string.length; i += 1) {
+		hash = string.charCodeAt(i) + ((hash << 5) - hash);
+	}
+
+	let color = "#";
+
+	for (i = 0; i < 3; i += 1) {
+		const value = (hash >> (i * 8)) & 0xff;
+		color += `00${value.toString(16)}`.substr(-2);
+	}
+	/* eslint-enable no-bitwise */
+
+	return color;
+}
+
+function stringAvatar(name) {
+	return {
+		sx: {
+			bgcolor: stringToColor(name),
+			margin: "auto",
+			width: 150,
+			height: 150,
+			fontSize: "70px",
+		},
+		children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+	};
+}
+
 export default function NavBar() {
   const linkStyle = {
     textDecoration: 'none',
@@ -106,7 +139,6 @@ export default function NavBar() {
 
   return (
     <Box 
-      bgcolor="#FFFFFF"
       sx={{ 
         flexGrow: 1
       }} 
@@ -116,7 +148,11 @@ export default function NavBar() {
         right: 0,
         width: '100%',
         zIndex: 1}}>
-      <AppBar position="static">
+      <AppBar 
+        position="static" 
+        sx={{ 
+          backgroundColor: "rgb(242, 249, 250, 0)"
+        }}>
         <Toolbar>
         {(user.access_token || localStorage.getItem("accessToken"))? (
           <IconButton
@@ -126,7 +162,9 @@ export default function NavBar() {
             aria-label="menu"
             sx={{ mr: 2 }}
             onClick={toggleDrawer("left", true)}>
-            <MenuIcon style={{color: "black", fontSize: "40px"}}/>
+            <MenuIcon sx={{
+              fontSize: "40px"
+            }}/>
           </IconButton>
         ) : null}
           <Drawer
@@ -138,13 +176,9 @@ export default function NavBar() {
                 marginLeft: "auto", 
                 marginRight: "auto", 
                 marginTop: "10px"}}>
-              <Avatar 
-                sx={{ bgcolor: deepOrange[600], 
-                width: 100, 
-                height: 100, 
-                fontSize: "50px" }}>
-                  N
-                </Avatar>
+                <Avatar 
+                  {...stringAvatar(`${localStorage.getItem("name")} ${localStorage.getItem("lastName")}`)} 
+                />
             </div>
             {list('left')}
           </Drawer>
@@ -153,15 +187,6 @@ export default function NavBar() {
           </Typography>
           {(user.access_token || localStorage.getItem("accessToken")) ? (
             <React.Fragment>
-              <Button 
-                color="inherit"
-                onClick={() => setNavigation({
-                  ...navigation,
-                  currentPage: "Visualization"
-                })} 
-                style={buttonStyle} >
-                <Link to="/bar-chart" style={linkStyle}>Visualization</Link>
-              </Button>
               <Button 
                 color="inherit"
                 onClick={() => {

@@ -11,6 +11,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 import {isValidEmail, isValidPassword} from '../utility/Accounts';
 import {POST} from "../api/Post";
@@ -155,12 +156,28 @@ export default function LogInPage() {
   };
 
   return (
-    <div style={{textAlign: "center", marginTop: "90px"}}> 
+    <div style={{textAlign: "center", marginTop: "90px", paddingTop: "50px"}}>
+      <Box
+        sx={{
+          borderRadius: "20px",
+          width: "70%",
+          height: "auto",
+          paddingTop: "20px",
+          paddingBottom: "20px",
+          marginLeft: "auto",
+          marginRight: "auto",
+          background: "rgba(232, 250, 255, 0.8)"
+        }}> 
+        {/** 
         <h1>Log In jorge.ortiz.c97@gmail.com</h1>
         <h1>AtomoEstable97</h1>
+        */}
+        <h1 style={{fontSize: "50px"}}>Log In</h1>
         <div style={{marginBottom: "10px"}}>
             <TextField 
-                style={{width: "60%"}}
+                style={{
+                  width: "60%"
+                }}
                 id="outlined-basic" 
                 label="Email" 
                 variant="outlined"
@@ -218,14 +235,17 @@ export default function LogInPage() {
         <div style={{marginBottom: "15px"}}>
             <Button 
               disabled={busyProps.disabledButton} 
-              style={{width: "40%"}} 
+              sx={{
+                width: "40%",
+                borderRadius: "20px"
+              }}
               onClick={(e) => handleLogin(e)} 
               variant="contained">
                 Log In
               </Button>
         </div>
         <a href="#">Forgot password?</a>
-
+      </Box>
     </div>
   );
 }

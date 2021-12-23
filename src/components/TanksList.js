@@ -29,15 +29,24 @@ export default function TanksList(props) {
   };
   
   return (
-    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+    <List 
+      sx={{ 
+        width: '100%', 
+        maxWidth: 360,
+        borderRadius: "10px"
+      }}>
       {allTanks.map((value) => {
         const labelId = `checkbox-list-label-${value}`;
 
         return (
           <ListItem
             key={value}
+            sx={{margin: "auto"}}
             disablePadding>
-            <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+            <ListItemButton
+              role={undefined} 
+              onClick={handleToggle(value)} 
+              dense>
               <ListItemIcon>
                 <Checkbox
                   edge="start"
@@ -47,7 +56,7 @@ export default function TanksList(props) {
                   inputProps={{ 'aria-labelledby': labelId }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={value} />
+              <ListItemText sx={{color: "#000000", fontStyle: "bold", fontWeight: 500}} id={labelId} primary={value} />
             </ListItemButton>
           </ListItem>
         );

@@ -1,6 +1,6 @@
 var timeOut = 3000;
-const apiRoute = "http://192.168.100.21:5000";
-const socketApiRoute = "http://192.168.100.21:5000/private";
+const apiRoute = "http://192.168.100.16:5000";
+const socketApiRoute = "http://192.168.100.16:5000/private";
 const apiModes = {
     LOGIN: "login",
     SIGNUP: "signup",

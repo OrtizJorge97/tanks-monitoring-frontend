@@ -216,11 +216,21 @@ function BarChart() {
 	}, []);
 
 	return (
-		<div style={{ marginTop: "90px" }}>
+		<div 
+			style={{ 
+				marginTop: "90px",
+				color: "white"
+		 	}}>
 			<div style={{ textAlign: "center" }}>
-				<h1>Company name: {user.company}</h1>
+				<h1>{user.company}</h1>
 				<FormControl component='fieldset'>
-					<FormLabel component='legend'>Select a Category</FormLabel>
+					<FormLabel 
+						sx={{
+							color: "white"
+						}} 
+						component='legend'>
+							Select a Category
+					</FormLabel>
 					<RadioGroup
 						row={true}
 						aria-label='gender'
@@ -232,17 +242,17 @@ function BarChart() {
 						}}>
 						<FormControlLabel
 							value={categories[0]}
-							control={<Radio />}
+							control={<Radio sx={{color: "white"}}/>}
 							label={categories[0]}
 						/>
 						<FormControlLabel
 							value={categories[1]}
-							control={<Radio />}
+							control={<Radio sx={{color: "white"}}/>}
 							label={categories[1]}
 						/>
 						<FormControlLabel
 							value={categories[2]}
-							control={<Radio />}
+							control={<Radio sx={{color: "white"}}/>}
 							label={categories[2]}
 						/>
 					</RadioGroup>
@@ -254,13 +264,28 @@ function BarChart() {
 				alignItems="center"
 				spacing={2}
 				mt={5}>
-				<div>
-					<h3>Select tanks to display (MAX 5)</h3>
+				<div 
+					style={{
+						backgroundColor: "rgba(255, 255, 255, 0.7)",
+						padding: "10px",
+						borderRadius: "15px",
+						width: "auto",
+						
+					}}>
+					<h3 style={{color: "black"}}>Tanks Available</h3>
 					<TanksList 
 						allTanks={dataFromServerDummy.tanks}
 						updateTanksSelected={updateTanksSelected}/>
 				</div>
-				<div style={{width: "60%", marginLeft: "15px"}}>
+				<div 
+					style={{
+						width: "60%", 
+						marginLeft: "15px",
+						backgroundColor: "rgba(255, 255, 255, 0.7)",
+						borderRadius: "15px",
+						padding: "15px",
+
+					}}>
 					<ChartComponent 
 						scaleRanges={scaleRanges}
 						tanksSelected={tanksSelected}
