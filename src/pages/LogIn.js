@@ -114,6 +114,7 @@ export default function LogInPage() {
           localStorage.setItem("name", jsonData.user.name);
           localStorage.setItem("lastName", jsonData.user.last_name);
           localStorage.setItem("company", jsonData.user.company);
+          localStorage.setItem("role", jsonData.user.role);
 
           setUser({
             ...user,

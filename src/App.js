@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from "react"; 
 import SignUp from './pages/SignUp';
+import Users from './pages/Users';
 import LogIn from "./pages/LogIn";
+import Tanks from './pages/Tanks';
 import Button from '@mui/material/Button';
 import BarChart from "./components/BarChart";
 import NavBar from "./components/NavBar";
@@ -40,6 +42,8 @@ function App() {
             <Route path="/log-in" element={<LogIn/>} />
             <Route path="/bar-chart" element={<BarChart/>} />
             <Route path="/profile" element={<Profile/>} />
+            <Route path="/users" element={<Users/>} />
+            <Route path="/tanks" element={<Tanks/>} />
           </Routes>
         </UserContext.Provider>
       </NavigationContext.Provider>

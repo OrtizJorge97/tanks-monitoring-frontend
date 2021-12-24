@@ -6,58 +6,16 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
-import EqualizerIcon from '@mui/icons-material/Equalizer';
-import TimelineIcon from '@mui/icons-material/Timeline';
-import { deepOrange, deepPurple } from '@mui/material/colors';
 import {
   Link
 } from "react-router-dom";
 
 import { UserContext, NavigationContext } from './Context';
+import SideBar from "./SideBar";
 
-function stringToColor(string) {
-	let hash = 0;
-	let i;
-
-	/* eslint-disable no-bitwise */
-	for (i = 0; i < string.length; i += 1) {
-		hash = string.charCodeAt(i) + ((hash << 5) - hash);
-	}
-
-	let color = "#";
-
-	for (i = 0; i < 3; i += 1) {
-		const value = (hash >> (i * 8)) & 0xff;
-		color += `00${value.toString(16)}`.substr(-2);
-	}
-	/* eslint-enable no-bitwise */
-
-	return color;
-}
-
-function stringAvatar(name) {
-	return {
-		sx: {
-			bgcolor: stringToColor(name),
-			margin: "auto",
-			width: 150,
-			height: 150,
-			fontSize: "70px",
-		},
-		children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
-	};
-}
 
 export default function NavBar() {
+
   const linkStyle = {
     textDecoration: 'none',
     color: "white"
@@ -67,6 +25,9 @@ export default function NavBar() {
   }
   const {navigation, setNavigation} = React.useContext(NavigationContext);
   const {user, setUser} = React.useContext(UserContext);
+  const [state, setState] = React.useState({
+    left: false
+  });
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -75,68 +36,7 @@ export default function NavBar() {
 
     setState({ ...state, [anchor]: open });
   };
-  const [state, setState] = React.useState({
-    left: false
-  });
   
-  const renderListItem = (text) => {
-    let icon = null;
-    let to = "/";
-
-    switch(text) {
-      case 'Profile':
-        icon = <AccountCircleIcon />
-        to = "/profile";
-        break;
-      case 'Collaborators':
-        icon = <ConnectWithoutContactIcon />
-        to = "/collaborators";
-        break;
-      case 'Visualization':
-        icon = <EqualizerIcon />
-        to = "/bar-chart";
-        break;
-      case 'Historic':
-        icon = <TimelineIcon />
-        to = "/historic";
-        break;
-      default:
-        icon = null;
-    }
-    
-    return (
-      <Link style={{textDecoration: "none", color: "black"}} to={to}>
-        <ListItem button key={text}>
-          <ListItemIcon>
-            {icon}
-          </ListItemIcon>
-          <ListItemText primary={text} />
-        </ListItem>
-      </Link>
-    );
-  };
-
-  const list = (anchor) => (
-    <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <List>
-        {['Profile', 'Collaborators'].map((text, index) => (
-          renderListItem(text)
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['Visualization', 'Historic'].map((text, index) => (
-            renderListItem(text)
-        ))}
-      </List>
-    </Box>
-  );
-
   return (
     <Box 
       sx={{ 
@@ -167,21 +67,7 @@ export default function NavBar() {
             }}/>
           </IconButton>
         ) : null}
-          <Drawer
-                anchor={'left'}
-                open={state['left']}
-                onClose={toggleDrawer('left', false)}>
-            <div 
-              style={{
-                marginLeft: "auto", 
-                marginRight: "auto", 
-                marginTop: "10px"}}>
-                <Avatar 
-                  {...stringAvatar(`${localStorage.getItem("name")} ${localStorage.getItem("lastName")}`)} 
-                />
-            </div>
-            {list('left')}
-          </Drawer>
+          <SideBar toggleDrawer={toggleDrawer} state={state}/>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {navigation.currentPage}
           </Typography>
