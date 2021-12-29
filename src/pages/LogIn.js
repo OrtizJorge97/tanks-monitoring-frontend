@@ -81,7 +81,7 @@ export default function LogInPage() {
 
       if(!emailError && !passwordError) {
         console.log(values.password);
-        response = await POST(apiModes.LOGIN,
+        response = await POST(apiModes.LOGIN, false,
                               {email: values.emailText, 
                               password: values.password});
         const jsonData = await response.json();
@@ -185,6 +185,11 @@ export default function LogInPage() {
                 type="text"
                 value={values.emailText}
                 onChange={(e) => handleChange(e, "emailText")}
+                onKeyUp={(e) => {
+                  if(e.code === 'Enter') {
+                    handleLogin(e);
+                  }
+                }}  
              />
         </div>
         <div style={{width: "60%", margin: "auto", marginBottom: "10px"}}>
@@ -198,6 +203,11 @@ export default function LogInPage() {
                 type={values.showPassword ? 'text' : 'password'}
                 value={values.password}
                 onChange={(e) => handleChange(e, 'password')}
+                onKeyUp={(e) => {
+                  if(e.code === 'Enter') {
+                    handleLogin(e);
+                  }
+                }}
                 endAdornment={
                 <InputAdornment position="end">
                     <IconButton

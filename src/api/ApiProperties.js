@@ -4,7 +4,9 @@ const socketApiRoute = "http://192.168.100.21:5000/private";
 const apiModes = {
     LOGIN: "login",
     SIGNUP: "signup",
-    GETUSER: "getuser"
+    GETUSER: "getuser",
+    FETCHTANKS: "fetchtanks",
+    ADDTANK: "addtank"
 };
 
 function BuildUrl(mode) {
@@ -18,6 +20,12 @@ function BuildUrl(mode) {
             break;
         case apiModes.GETUSER:
             urlResult = `${apiRoute}/auth/get-user`;
+            break;
+        case apiModes.FETCHTANKS:
+            urlResult = `${apiRoute}/api/fetch-tanks`;
+            break;
+        case apiModes.ADDTANK:
+            urlResult = `${apiRoute}/api/add-tank`;
             break;
         default:
             urlResult = ""

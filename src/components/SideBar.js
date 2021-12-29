@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Avatar from '@mui/material/Avatar';
 import BuildIcon from '@mui/icons-material/Build';
 import GroupIcon from '@mui/icons-material/Group';
@@ -61,9 +62,6 @@ export default function SideBar(props) {
     const { toggleDrawer, state } = props;
     console.log(localStorage.getItem("role"));
     
-    console.log(returnVisualization(localStorage.getItem("role")))
-    console.log(returnUserOptions(localStorage.getItem("role")))
-    console.log(returnTanksOptions(localStorage.getItem("role")))
     const renderListItem = (text) => {
         let icon = null;
         let to = "/";
@@ -90,7 +88,7 @@ export default function SideBar(props) {
             to = '/users';
             break;
             case 'Tanks':
-            icon = <BuildIcon />
+            icon = <RemoveRedEyeIcon />
             to = '/tanks';
             break;
           default:
@@ -118,15 +116,15 @@ export default function SideBar(props) {
           onKeyDown={toggleDrawer(anchor, false)}
         >
           <List>
-            {returnUserOptions(localStorage.getItem("role")).map((text, index) => (
+            {localStorage.getItem("role") ? returnUserOptions(localStorage.getItem("role")).map((text, index) => (
               renderListItem(text)
-            ))}
+            )) : null}
           </List>
           <Divider />
           <List>
-            {returnVisualization(localStorage.getItem("role")).map((text, index) => (
+            {localStorage.getItem("role") ? returnVisualization(localStorage.getItem("role")).map((text, index) => (
                 renderListItem(text)
-            ))}
+            )) : null}
           </List>
           <Divider />
           <List>

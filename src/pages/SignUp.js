@@ -73,7 +73,7 @@ export default function SignUpPage() {
             });
 
             if(passwordMatch) {
-                response = await POST(apiModes.SIGNUP, user);
+                response = await POST(apiModes.SIGNUP, false, user);
                 console.log(response);
                 jsonResponse = await response.json();
                 if(response.status === 200) {
