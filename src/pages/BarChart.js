@@ -11,13 +11,12 @@ import MuiAlert from "@mui/material/Alert";
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
-
-import ChartComponent from "./ChartComponent";
-import { socketApiRoute } from "../api/ApiProperties";
-import { UserContext } from "./Context";
 import { GET } from "../api/Get";
+import ChartComponent from "../components/ChartComponent";
+import { socketApiRoute } from "../api/ApiProperties";
+import { UserContext } from "../components/Context";
 import { apiModes } from "../api/ApiProperties";
-import TanksList from "./TanksList";
+import TanksList from "../components/TanksList";
 
 import socketIOClient from "socket.io-client";
 const ENDPOINT = socketApiRoute;

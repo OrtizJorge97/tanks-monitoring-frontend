@@ -5,12 +5,18 @@ import {
 	NavigationContext,
 	TankContext,
 } from "../components/Context";
+import {
+    useLocation
+} from 'react-router-dom';
 
 export default function DetailsTank() {
-	const { tankContextData, setTankContextData } = React.useContext(TankContext);
-	console.log(tankContextData.tankSelected);
+	//const { tankContextData, setTankContextData } = React.useContext(TankContext);
+	//console.log(tankContextData.tankSelected);
+	const location = useLocation();
 
-	useEffect(() => {}, []);
+    useEffect(() => {
+        console.log(`name passed: ${location.state.name}`);
+    }, []);
 	return (
 		<Box
 			sx={{
@@ -22,7 +28,7 @@ export default function DetailsTank() {
 					opacity: [0.9, 0.8, 0.7],
 				},
 			}}>
-			<h1>Tank name Details: {tankContextData.tankSelected}</h1>
+			<h1>Tank name Details: {location.state.tankSelected}</h1>
 		</Box>
 	);
 }

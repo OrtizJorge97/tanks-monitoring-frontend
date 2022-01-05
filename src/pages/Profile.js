@@ -10,7 +10,8 @@ import { styled } from "@mui/material/styles";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
-import { UserContext } from "./Context";
+import useFetch from "../hooks/useFetch";
+import { UserContext } from "../components/Context";
 import { GET } from "../api/Get";
 import { apiModes } from "../api/ApiProperties";
 
@@ -68,7 +69,7 @@ export default function Profile() {
 	const [open, setOpen] = useState(false);
 	const navigate = useNavigate();
 	document.title = "User";
-	const [localUser, setLocalUser] = useState({
+	const [localUser, setLocalUser, doFetch] = useFetch({
 		name: "",
 		lastName: "",
 		email: "",
@@ -91,11 +92,10 @@ export default function Profile() {
 	useEffect(() => {
 		async function getUser() {
 			try {
-				const response = await GET(apiModes.GETUSER, true, {
+				const jsonData = await doFetch("GET", apiModes.GETUSER, true, {
 					accessToken: localStorage.getItem("accessToken"),
 				});
 
-				const jsonData = await response.json();
 				if (jsonData.msg === "Succesfully authenticated") {
 					setLocalUser({
 						name: jsonData.name,

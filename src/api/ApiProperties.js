@@ -6,7 +6,8 @@ const apiModes = {
     SIGNUP: "signup",
     GETUSER: "getuser",
     FETCHTANKS: "fetchtanks",
-    ADDTANK: "addtank"
+    ADDTANK: "addtank",
+    FETCHTANK: "fetchtank"
 };
 
 function BuildUrl(mode) {
@@ -23,6 +24,9 @@ function BuildUrl(mode) {
             break;
         case apiModes.FETCHTANKS:
             urlResult = `${apiRoute}/api/fetch-tanks`;
+            break;
+        case apiModes.FETCHTANK:
+            urlResult = `${apiRoute}/api/fetch-tank`;
             break;
         case apiModes.ADDTANK:
             urlResult = `${apiRoute}/api/add-tank`;

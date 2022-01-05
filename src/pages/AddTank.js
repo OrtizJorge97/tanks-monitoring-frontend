@@ -10,13 +10,14 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../components/Context";
 import { GET } from "../api/Get";
 import { POST } from "../api/Post";
+import useFetch from "../hooks/useFetch";
 import { apiModes } from "../api/ApiProperties";
 import { validateTankRegister } from "../utility/TanksUtility";
 
 export default function AddTank() {
 	const navigate = useNavigate();
 	const { user, setUser } = React.useContext(UserContext);
-	const [tank, setTank] = useState({
+	const [tank, setTank, doFetch] = useFetch({
 		tankId: "",
 		WtrLvlMin: "",
 		WtrLvlMax: "",
@@ -41,22 +42,25 @@ export default function AddTank() {
 	const handleAddTank = async(e) => {
 		try {
 			e.preventDefault();
+			console.log(tank);
 			setPageState({
 				...pageState,
 				isBusy: true,
 				displayAlert: false,
 			});
 			var tankValidationMessage = validateTankRegister(tank);
+			console.log(tankValidationMessage);
 			if (tankValidationMessage) {
 				setPageState({
 					...pageState,
 					fieldsValidationErrorString: tankValidationMessage,
+					displayAlert: true,
 					alertSeverity: "error"
 				});
 			}
 			else {
 				let locSeverity = '';
-				const response = await POST(apiModes.ADDTANK, true, {
+				const jsonData = await doFetch("POST", apiModes.ADDTANK, true, {
 					tankId: tank.tankId,
 					WtrLvlMin: tank.WtrLvlMin,
 					WtrLvlMax: tank.WtrLvlMax,
@@ -66,8 +70,6 @@ export default function AddTank() {
 					PhMax: tank.PhMax,
 					accessToken: localStorage.getItem("accessToken"),
 					company: user.company});
-				const jsonData = await response.json();
-				console.log(jsonData);
 				if(jsonData.msg === 'Token has expired') {
 					navigate('/log-in');
 				}
@@ -105,15 +107,12 @@ export default function AddTank() {
 	};
 
 	useEffect(() => {
-		console.log(user.accessToken);
 		async function authenticateUser() {
 			try {
-				const response = await GET(apiModes.GETUSER, true, {
+				const jsonData = await doFetch("GET", apiModes.GETUSER, true, {
 					accessToken: localStorage.getItem("accessToken"),
 				});
 
-				const jsonData = await response.json();
-				console.log(jsonData);
 				if (jsonData.msg === "Token has expired") {
 					setUser({
 						name: "",
@@ -155,7 +154,7 @@ export default function AddTank() {
 				textAlign: "center",
 			}}
 			autoComplete='off'>
-			<h1>Register tank information</h1>
+			<h1>Type parameters</h1>
 			<div style={{ marginTop: "5px", marginBottom: "10px" }}>
 				<TextField
 					id='outlined-basic'
@@ -168,7 +167,7 @@ export default function AddTank() {
 			<Divider>Water Level Values</Divider>
 			<div style={{ marginTop: "10px", marginBottom: "10px" }}>
 				<TextField
-					sx={{ marginRight: "10px" }}
+					sx={{ }}
 					id='outlined-basic'
 					label='Min'
 					type='number'
@@ -188,7 +187,7 @@ export default function AddTank() {
 			<Divider>%Oxygen Values</Divider>
 			<div style={{ marginTop: "10px", marginBottom: "10px" }}>
 				<TextField
-					sx={{ marginRight: "10px" }}
+					sx={{  }}
 					id='outlined-basic'
 					label='Min'
 					type='number'
@@ -208,7 +207,7 @@ export default function AddTank() {
 			<Divider>PH Values</Divider>
 			<div style={{ marginTop: "10px" }}>
 				<TextField
-					sx={{ marginRight: "10px" }}
+					sx={{  }}
 					id='outlined-basic'
 					label='Min'
 					type='number'

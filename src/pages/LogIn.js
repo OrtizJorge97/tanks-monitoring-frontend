@@ -14,7 +14,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
 import {isValidEmail, isValidPassword} from '../utility/Accounts';
-import {POST} from "../api/Post";
+import useFetch from "../hooks/useFetch";
 import { apiModes } from '../api/ApiProperties';
 import { UserContext } from '../components/Context';
 
@@ -24,13 +24,14 @@ export default function LogInPage() {
 
   const navigate = useNavigate();
   document.title = "Log In";
-  const [values, setValues] = React.useState({
+  const [values, setValues, doFetch] = useFetch({
     password: '',
     emailText: '',
     showPassword: false,
     emailError: "",
     passwordError: ""
   });
+
   const [validFields, setValidFields] = React.useState({
     validEmail: true,
     validPassword: true
@@ -81,25 +82,24 @@ export default function LogInPage() {
 
       if(!emailError && !passwordError) {
         console.log(values.password);
-        response = await POST(apiModes.LOGIN, false,
-                              {email: values.emailText, 
-                              password: values.password});
-        const jsonData = await response.json();
+        const jsonData = await doFetch("POST", apiModes.LOGIN, false,
+                                      {email: values.emailText, 
+                                      password: values.password});
         console.log(jsonData);
         //check if server responded and if status was successful
-        if(response && response.status === 200) {
-          if(jsonData.message === "Succesfully authenticated") {
-            responseMsgTextColor = "#03945f";
-            userAuthenticated = true;
-          }
-          else if(jsonData.message === "Password incorect") {
-            responseMsgTextColor = "#940303";
-          }
+        
+        if(jsonData.msg === "Succesfully authenticated") {
+          responseMsgTextColor = "#03945f";
+          userAuthenticated = true;
         }
-        if(response && response.status === 404) {
+        else if(jsonData.msg === "Password incorect") {
           responseMsgTextColor = "#940303";
         }
-        responseTextMessage = jsonData.message;
+        
+        else if(jsonData.msg === "User not found") {
+          responseMsgTextColor = "#940303";
+        }
+        responseTextMessage = jsonData.msg;
           
         setBusyProps({
           progressVisibility: "none",
@@ -107,7 +107,7 @@ export default function LogInPage() {
           responseTextMessage: responseTextMessage,
           responseMsgTextColor: responseMsgTextColor
         });
-
+        console.log(userAuthenticated);
         if(userAuthenticated) {
           localStorage.setItem("accessToken", jsonData.access_token);
           localStorage.setItem("refreshToken", jsonData.refresh_token);

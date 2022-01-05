@@ -6,9 +6,9 @@ import Tanks from './pages/Tanks';
 import AddTank from './pages/AddTank';
 import DetailsTank from "./pages/DetailsTank";
 import Button from '@mui/material/Button';
-import BarChart from "./components/BarChart";
+import BarChart from "./pages/BarChart";
 import NavBar from "./components/NavBar";
-import Profile from "./components/Profile";
+import Profile from "./pages/Profile";
 //import { ThemeProvider } from "./ThemeContext";
 import { UserContext, NavigationContext, TankContext } from './components/Context';
 

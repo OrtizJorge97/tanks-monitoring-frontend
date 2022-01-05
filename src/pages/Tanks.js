@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
-
+import useFetch from "../hooks/useFetch";
 import { UserContext, NavigationContext, TankContext } from '../components/Context';
 import { GET } from '../api/Get';
 import { apiModes } from '../api/ApiProperties';
@@ -30,7 +30,7 @@ export default function Tanks() {
     const navigate = useNavigate();
     const {user, setUser} = React.useContext(UserContext);
     const {tankContextData, setTankContextData} = React.useContext(TankContext);
-    const [rows, setRows] = useState(rowsDummy);
+    const [rows, setRows, doFetch] = useFetch(rowsDummy);
     const [componentState, setComponentState] = useState({
         isBusy: false,
         
@@ -62,10 +62,10 @@ export default function Tanks() {
                     <div style={{margin: "auto"}}>
                         <IconButton onClick={() => {
                             console.log("Passed parameter: " + String(params.row.tankId));
-                            setTankContextData({
-                                tankSelected: params.row.tankId
-                            });
-                            navigate('/details-tank');
+                            //setTankContextData({
+                            //    tankSelected: params.row.tankId
+                            //});
+                            navigate('/details-tank', {state: {tankSelected: params.row.tankId}});
                          }}>
                             <Tooltip  title="Details" placement="left-start">
                                 <VisibilityIcon/>
@@ -76,9 +76,11 @@ export default function Tanks() {
                             setTankContextData({
                                 tankSelected: params.row.tankId
                             });
-                            navigate('/modify-tank');
+                            navigate('/modify-tank', {replace: false, state: {
+                                tankId: params.row.tankId
+                            }});
                         }}>
-                            <Tooltip  title="Edit" placement="top">
+                            <Tooltip title="Edit" placement="top">
                                 <EditIcon/>
                             </Tooltip>
                         </IconButton>
@@ -96,14 +98,11 @@ export default function Tanks() {
     useEffect(() => {
         async function fetchTanks() {
             try {
-                const response = await GET(apiModes.FETCHTANKS, true, {
+                const jsonData = await doFetch("GET", apiModes.FETCHTANKS, true, {
                     accessToken: localStorage.getItem("accessToken"),
                 });
                 
-                const jsonData = await response.json();
-                console.log(jsonData);
                 if(jsonData.msg === 'Success fetching') {
-                    console.log(jsonData.tanks);
                     if(!jsonData.tanks.length){console.log("no data ")}
                     setRows(jsonData.tanks);
                 }

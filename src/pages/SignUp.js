@@ -15,7 +15,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from "../components/Context";
 
-import { POST } from "../api/Post";
+import useFetch from "../hooks/useFetch";
 import { apiModes } from "../api/ApiProperties";
 
 /*
@@ -34,7 +34,7 @@ export default function SignUpPage() {
     const navigate = useNavigate();
     document.title = "Sign Up";
 
-    const [user, setUser] = useState({
+    const [user, setUser, doFetch] = useFetch({
         name: "",
         lastName: "",
         email: "",
@@ -73,10 +73,9 @@ export default function SignUpPage() {
             });
 
             if(passwordMatch) {
-                response = await POST(apiModes.SIGNUP, false, user);
-                console.log(response);
-                jsonResponse = await response.json();
-                if(response.status === 200) {
+                jsonResponse = await doFetch("POST", apiModes.SIGNUP, false, user);
+                console.log(jsonResponse);
+                if(jsonResponse.msg === "User already registered" || jsonResponse.msg === "Succesfully added user") {
                     fontColor = "#03945f";
                 }
                 else {
