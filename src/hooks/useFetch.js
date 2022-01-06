@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import { POST } from "../api/Post";
 import { GET } from "../api/Get";
+import { DELETE } from "../api/Delete";
 import { apiModes } from "../api/ApiProperties";
 
 function buildHttpGetParams(apiMode, payload) {
@@ -28,9 +29,12 @@ export default function useFetch(initialValue) {
         if(httpMethod === "POST") {
             response = await POST(apiMode, authorization, payload);
         }
-        if(httpMethod === "GET") {
+        else if(httpMethod === "GET") {
             const httpGetParams = buildHttpGetParams(apiMode, payload);
             response = await GET(apiMode, authorization, payload, httpGetParams);
+        }
+        else if(httpMethod === "DELETE") {
+            response = await DELETE(apiMode, authorization, payload);
         }
 
         return await response.json();
