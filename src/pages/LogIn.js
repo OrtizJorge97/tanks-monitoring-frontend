@@ -167,7 +167,7 @@ export default function LogInPage() {
           paddingBottom: "20px",
           marginLeft: "auto",
           marginRight: "auto",
-          background: "rgba(232, 250, 255, 0.8)"
+          backgroundColor: ""
         }}> 
         {/** 
         <h1>Log In jorge.ortiz.c97@gmail.com</h1>
@@ -248,7 +248,8 @@ export default function LogInPage() {
               disabled={busyProps.disabledButton} 
               sx={{
                 width: "40%",
-                borderRadius: "20px"
+                borderRadius: "20px",
+                backgroundColor: "#54008c"
               }}
               onClick={(e) => handleLogin(e)} 
               variant="contained">

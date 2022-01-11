@@ -218,14 +218,14 @@ function BarChart() {
 		<div 
 			style={{ 
 				marginTop: "90px",
-				color: "white"
+				color: "black"
 		 	}}>
 			<div style={{ textAlign: "center" }}>
-				<h1>{user.company}</h1>
+				<h1>{user.company} tanks</h1>
 				<FormControl component='fieldset'>
 					<FormLabel 
 						sx={{
-							color: "white"
+							color: "black"
 						}} 
 						component='legend'>
 							Select a Category
@@ -241,17 +241,17 @@ function BarChart() {
 						}}>
 						<FormControlLabel
 							value={categories[0]}
-							control={<Radio sx={{color: "white"}}/>}
+							control={<Radio sx={{color: "black"}}/>}
 							label={categories[0]}
 						/>
 						<FormControlLabel
 							value={categories[1]}
-							control={<Radio sx={{color: "white"}}/>}
+							control={<Radio sx={{color: "black"}}/>}
 							label={categories[1]}
 						/>
 						<FormControlLabel
 							value={categories[2]}
-							control={<Radio sx={{color: "white"}}/>}
+							control={<Radio sx={{color: "black"}}/>}
 							label={categories[2]}
 						/>
 					</RadioGroup>

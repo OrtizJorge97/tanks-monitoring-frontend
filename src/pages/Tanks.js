@@ -77,7 +77,7 @@ export default function Tanks() {
             }
 			
 		} catch (error) {}
-	};
+	}; 
 
 	const handleClose = () => {
 		setOpen(false);
@@ -114,7 +114,7 @@ export default function Tanks() {
 								//    tankSelected: params.row.tankId
 								//});
 								navigate("/details-tank", {
-									state: { tankSelected: params.row.tankId },
+									state: { tankId: params.row.tankId },
 								});
 							}}>
 							<Tooltip title='Details' placement='left-start'>

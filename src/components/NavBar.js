@@ -51,7 +51,7 @@ export default function NavBar() {
       <AppBar 
         position="static" 
         sx={{ 
-          backgroundColor: "rgb(242, 249, 250, 0)"
+          backgroundColor: "#54008c"
         }}>
         <Toolbar>
         {(user.access_token || localStorage.getItem("accessToken"))? (
