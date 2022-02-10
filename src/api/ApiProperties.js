@@ -1,6 +1,6 @@
 var timeOut = 3000;
-const apiRoute = "http://192.168.100.21:5000";
-const socketApiRoute = "http://192.168.100.21:5000/private";
+const apiRoute = "http://192.168.100.22:5000";
+const socketApiRoute = "http://192.168.100.22:5000/private";
 const apiModes = {
 	LOGIN: "login",
 	SIGNUP: "signup",
@@ -8,11 +8,17 @@ const apiModes = {
 	FETCHTANKS: "fetchtanks",
 	ADDTANK: "addtank",
 	FETCHTANK: "fetchtank",
-    DELETETANK: "deletetank"
+	DELETETANK: "deletetank",
+	FETCHUSERS: "fetchusers",
+	FETCHUSER: "fetchuser",
+	UPDATEUSER: "updateuser",
+	DELETEUSER: "deleteuser",
+	FETCHHISTORIC: "fetch_historic"
 };
 
 function BuildUrl(mode) {
 	let urlResult = "";
+	console.log(mode);
 	switch (mode) {
 		case apiModes.LOGIN:
 			urlResult = `${apiRoute}/auth/login`;
@@ -37,6 +43,21 @@ function BuildUrl(mode) {
 			break;
 		case apiModes.DELETETANK:
 			urlResult = `${apiRoute}/api/delete-tank`;
+			break;
+		case apiModes.FETCHUSERS:
+			urlResult = `${apiRoute}/api/fetch-users`;
+			break;
+		case apiModes.FETCHUSER:
+			urlResult = `${apiRoute}/api/fetch-user`;
+			break;
+		case apiModes.UPDATEUSER:
+			urlResult = `${apiRoute}/api/update-user`;
+			break;
+		case apiModes.DELETEUSER:
+			urlResult = `${apiRoute}/api/delete-user`;
+			break;
+		case apiModes.FETCHHISTORIC:
+			urlResult = `${apiRoute}/api/fetch-historic`;
 			break;
 		default:
 			urlResult = "";

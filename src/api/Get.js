@@ -3,6 +3,7 @@ import { apiRoute, BuildUrl, apiModes } from "./ApiProperties";
 async function GET(mode, authorization=false, payload=null, httpGetParams=null) {
     const options = getOptions(authorization, payload);
     var response = null;
+    console.log(mode);
     const url = BuildUrl(mode);
     console.log(url);
 

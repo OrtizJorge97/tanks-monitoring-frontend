@@ -5,13 +5,14 @@ import Visibility from '@mui/icons-material/Visibility';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { 
-    InputLabel, 
-    FormControl, 
+import {
+    InputLabel,
+    FormControl,
     OutlinedInput,
     InputAdornment,
     IconButton,
-    CircularProgress } from '@mui/material';
+    CircularProgress
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from "../components/Context";
 
@@ -58,7 +59,7 @@ export default function SignUpPage() {
             [prop]: e.target.value
         })
     }
-    const handleOnClick = async(e) => {
+    const handleOnClick = async (e) => {
         try {
             var message = "";
             var fontColor = "";
@@ -72,10 +73,10 @@ export default function SignUpPage() {
                 buttonDisabled: true
             });
 
-            if(passwordMatch) {
+            if (passwordMatch) {
                 jsonResponse = await doFetch("POST", apiModes.SIGNUP, false, user);
                 console.log(jsonResponse);
-                if(jsonResponse.msg === "User already registered" || jsonResponse.msg === "Succesfully added user") {
+                if (jsonResponse.msg === "User already registered" || jsonResponse.msg === "Succesfully added user") {
                     fontColor = "#03945f";
                 }
                 else {
@@ -87,7 +88,7 @@ export default function SignUpPage() {
                 message = "Passwords do not match";
                 fontColor = "#940303";
             }
-    
+
             setComponentState({
                 ...componentState,
                 isBusy: "none",
@@ -96,14 +97,14 @@ export default function SignUpPage() {
                 requestMsgColor: fontColor
             });
 
-            if(response && response.status === 200) {        
+            if (response && response.status === 200) {
                 navigate("/log-in");
             }
         }
-        catch(error) {
-            console.log(typeof(error));
-            console.log(typeof(error.message));
-            if(error.message === 'Failed to fetch') {
+        catch (error) {
+            console.log(typeof (error));
+            console.log(typeof (error.message));
+            if (error.message === 'Failed to fetch') {
                 setComponentState({
                     ...componentState,
                     isBusy: "none",
@@ -115,46 +116,46 @@ export default function SignUpPage() {
         }
     };
 
-    return(
-        <div style={{textAlign: "center", marginTop: "90px"}}>
+    return (
+        <div style={{ textAlign: "center", marginTop: "90px" }}>
             <Box
                 sx={{
-                borderRadius: "20px",
-                width: "70%",
-                height: "auto",
-                paddingTop: "20px",
-                paddingBottom: "20px",
-                marginLeft: "auto",
-                marginRight: "auto",
-                background: "rgba(232, 250, 255, 0.8)"
-            }}> 
+                    borderRadius: "20px",
+                    width: "70%",
+                    height: "auto",
+                    paddingTop: "20px",
+                    paddingBottom: "20px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    background: "rgba(232, 250, 255, 0)"
+                }}>
                 <h1>Sign Up</h1>
                 <div>
-                    <TextField 
-                        style={{width: "50%", marginBottom: "15px"}} 
-                        id="outlined-basic" 
-                        label="Name" 
+                    <TextField
+                        style={{ width: "50%", marginBottom: "15px" }}
+                        id="outlined-basic"
+                        label="Name"
                         variant="outlined"
                         value={user.name}
                         onChange={(e) => handleChange(e, 'name')} />
                 </div>
                 <div>
-                    <TextField 
-                        style={{width: "50%", marginBottom: "15px"}} 
-                        id="outlined-basic" 
-                        label="Last Name" 
+                    <TextField
+                        style={{ width: "50%", marginBottom: "15px" }}
+                        id="outlined-basic"
+                        label="Last Name"
                         variant="outlined"
                         value={user.lastName}
                         onChange={(e) => handleChange(e, 'lastName')} />
                 </div>
                 <div>
-                    <TextField 
-                        style={{width: "50%", marginBottom: "10px"}} 
-                        id="outlined-basic" 
-                        label="Email" 
-                        variant="outlined" 
+                    <TextField
+                        style={{ width: "50%", marginBottom: "10px" }}
+                        id="outlined-basic"
+                        label="Email"
+                        variant="outlined"
                         value={user.email}
-                        onChange={(e) => handleChange(e, 'email')}/>
+                        onChange={(e) => handleChange(e, 'email')} />
                 </div>
                 <div>
                     <FormControl sx={{ m: 1, width: '50%' }} variant="outlined">
@@ -165,19 +166,19 @@ export default function SignUpPage() {
                             value={user.password}
                             onChange={(e) => handleChange(e, 'password')}
                             endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={() => setComponentState({
-                                    ...componentState,
-                                    showPassword: !componentState.showPassword
-                                })}
-                                onMouseDown={(e) => e.preventDefault()}
-                                edge="end"
-                                >
-                                {componentState.showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={() => setComponentState({
+                                            ...componentState,
+                                            showPassword: !componentState.showPassword
+                                        })}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        edge="end"
+                                    >
+                                        {componentState.showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
                             }
                             label="Password"
                         />
@@ -192,58 +193,59 @@ export default function SignUpPage() {
                             value={user.passwordVerify}
                             onChange={(e) => handleChange(e, 'passwordVerify')}
                             endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={() => setComponentState({
-                                    ...componentState,
-                                    showVerifyPassword: !componentState.showVerifyPassword
-                                })}
-                                onMouseDown={(e) => e.preventDefault()}
-                                edge="end"
-                                >
-                                {componentState.showVerifyPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={() => setComponentState({
+                                            ...componentState,
+                                            showVerifyPassword: !componentState.showVerifyPassword
+                                        })}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        edge="end"
+                                    >
+                                        {componentState.showVerifyPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
                             }
                             label="Password"
                         />
                     </FormControl>
                 </div>
-                
-                <div style={{margin: "auto"}}>
-                    <TextField 
-                        type="text" 
-                        style={{width: "50%", marginBottom: "10px"}} 
-                        id="outlined-basic" 
-                        label="Company" 
+
+                <div style={{ margin: "auto" }}>
+                    <TextField
+                        type="text"
+                        style={{ width: "50%", marginBottom: "10px" }}
+                        id="outlined-basic"
+                        label="Company"
                         variant="outlined"
                         value={user.company}
                         onChange={(e) => handleChange(e, 'company')} />
                 </div>
-                <div style={{marginBottom: "15px"}}>
+                <div style={{ marginBottom: "15px" }}>
                     <CircularProgress
-                        style={{display: componentState.isBusy, margin: "auto"}} />
+                        style={{ display: componentState.isBusy, margin: "auto" }} />
                 </div>
                 {componentState.requestMessage ? (
-                    <div style={{marginBottom: "15px", color: componentState.requestMsgColor}}>
-                        <Alert 
-                            style={{width: "40%", margin: "auto"}} 
+                    <div style={{ marginBottom: "15px", color: componentState.requestMsgColor }}>
+                        <Alert
+                            style={{ width: "40%", margin: "auto" }}
                             severity={(componentState.requestMsgColor === "#03945f") ? "success" : "error"}>
-                                {componentState.requestMessage}
+                            {componentState.requestMessage}
                         </Alert>
                     </div>
                 ) : null}
-                <Button 
+                <Button
                     sx={{
                         width: "40%",
                         borderRadius: "20px",
-                        marginBottom: "15px"
+                        marginBottom: "15px",
+                        backgroundColor: "#54008c"
                     }}
-                    onClick={(e) => handleOnClick(e)} 
+                    onClick={(e) => handleOnClick(e)}
                     variant="contained"
                     disabled={componentState.buttonDisabled}>
-                        Sign Up
+                    Sign Up
                 </Button>
             </Box>
         </div>

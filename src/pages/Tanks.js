@@ -8,6 +8,8 @@ import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import EqualizerIcon from "@mui/icons-material/Equalizer";
+import TimelineIcon from "@mui/icons-material/Timeline";
 
 import ConfirmationModal from "../components/tanks/ConfirmationModal";
 import useFetch from "../hooks/useFetch";
@@ -16,7 +18,6 @@ import {
 	NavigationContext,
 	TankContext,
 } from "../components/Context";
-import { GET } from "../api/Get";
 import { apiModes } from "../api/ApiProperties";
 
 const rowsDummy = [
@@ -40,44 +41,41 @@ export default function Tanks() {
 	const [componentState, setComponentState] = useState({
 		isBusy: false,
 		tankSelected: "",
-        deleteIsBusy: false,
-        deleteModalMsg: ""
+		deleteIsBusy: false,
+		deleteModalMsg: "",
 	});
 	const handleDelete = async () => {
 		try {
-            setComponentState({
-                ...componentState,
-                deleteIsBusy: true,
-                deleteModalMsg: ""
-            });
+			setComponentState({
+				...componentState,
+				deleteIsBusy: true,
+				deleteModalMsg: "",
+			});
 			const jsonData = await doFetch("DELETE", apiModes.DELETETANK, true, {
 				tankId: componentState.tankSelected,
 				accessToken: localStorage.getItem("accessToken"),
 			});
-            console.log(jsonData.msg);
-            if(jsonData.msg === 'Token has expired') {
-                navigate('log-in');
-            }
-            else if(jsonData.msg === 'Operation Succeded') {
-                fetchTanks();
-                setComponentState({
-                    ...componentState,
-                    deleteIsBusy: false,
-                    deleteModalMsg: jsonData.msg
-                });
-                setOpen(false);
-            }
-            else {
-                setComponentState({
-                    ...componentState,
-                    deleteIsBusy: false,
-                    deleteModalMsg: jsonData.msg
-                });
-                setOpen(true);
-            }
-			
+			console.log(jsonData.msg);
+			if (jsonData.msg === "Token has expired") {
+				navigate("log-in");
+			} else if (jsonData.msg === "Operation Succeded") {
+				fetchTanks();
+				setComponentState({
+					...componentState,
+					deleteIsBusy: false,
+					deleteModalMsg: jsonData.msg,
+				});
+				setOpen(false);
+			} else {
+				setComponentState({
+					...componentState,
+					deleteIsBusy: false,
+					deleteModalMsg: jsonData.msg,
+				});
+				setOpen(true);
+			}
 		} catch (error) {}
-	}; 
+	};
 
 	const handleClose = () => {
 		setOpen(false);
@@ -121,36 +119,43 @@ export default function Tanks() {
 								<VisibilityIcon />
 							</Tooltip>
 						</IconButton>
-						<IconButton
-							onClick={() => {
-								console.log("Passed parameter: " + String(params.row.tankId));
-								setTankContextData({
-									tankSelected: params.row.tankId,
-								});
-								navigate("/modify-tank", {
-									replace: false,
-									state: {
-										tankId: params.row.tankId,
-									},
-								});
-							}}>
-							<Tooltip title='Edit' placement='top'>
-								<EditIcon />
-							</Tooltip>
-						</IconButton>
-						<IconButton
-							onClick={() => {
-								setComponentState({
-									...componentState,
-									tankSelected: params.row.tankId,
-                                    deleteModalMsg: ""
-								});
-								setOpen(true);
-							}}>
-							<Tooltip title='Delete' placement='right-end'>
-								<DeleteIcon />
-							</Tooltip>
-						</IconButton>
+						{localStorage.getItem("role") === "Administrator" ||
+						localStorage.getItem("role") === "Supervisor" ? (
+							<React.Fragment>
+								<IconButton
+									onClick={() => {
+										console.log(
+											"Passed parameter: " + String(params.row.tankId)
+										);
+										setTankContextData({
+											tankSelected: params.row.tankId,
+										});
+										navigate("/modify-tank", {
+											replace: false,
+											state: {
+												tankId: params.row.tankId,
+											},
+										});
+									}}>
+									<Tooltip title='Edit' placement='top'>
+										<EditIcon />
+									</Tooltip>
+								</IconButton>
+								<IconButton
+									onClick={() => {
+										setComponentState({
+											...componentState,
+											tankSelected: params.row.tankId,
+											deleteModalMsg: "",
+										});
+										setOpen(true);
+									}}>
+									<Tooltip title='Delete' placement='right-end'>
+										<DeleteIcon />
+									</Tooltip>
+								</IconButton>
+							</React.Fragment>
+						) : null}
 					</div>
 				);
 			},
@@ -199,13 +204,33 @@ export default function Tanks() {
 				backgroundColor: "rgba(255, 255, 255, 0.9)",
 			}}>
 			<h1 style={{ textAlign: "center" }}>{user.company} Tanks</h1>
-			<div>
+			<div 
+				style={{
+					display: "flex", 
+					flexDirection: "row", 
+					justifyContent: "space-around",
+					marginBottom: "15px"
+				}}>
 				<Button
 					sx={{ borderRadius: "10px" }}
 					variant='contained'
 					startIcon={<AddIcon />}
 					onClick={() => navigate("/add-tank")}>
 					Add
+				</Button>
+				<Button
+					sx={{ borderRadius: "10px", backgroundColor: "#9e6a03"}}
+					variant='contained'
+					startIcon={<EqualizerIcon />}
+					onClick={() => navigate("/tanks-monitor")}>
+					Visualization
+				</Button>
+				<Button
+					sx={{ borderRadius: "10px", backgroundColor: "#085c02" }}
+					variant='contained'
+					startIcon={<TimelineIcon />}
+					onClick={() => navigate("/historic")}>
+					Historic
 				</Button>
 			</div>
 			<DataGrid
@@ -225,8 +250,8 @@ export default function Tanks() {
 				tankSelected={componentState.tankSelected}
 				handleClose={handleClose}
 				handleDelete={handleDelete}
-                deleteIsBusy={componentState.deleteIsBusy}
-                deleteModalMsg={componentState.deleteModalMsg}
+				deleteIsBusy={componentState.deleteIsBusy}
+				deleteModalMsg={componentState.deleteModalMsg}
 			/>
 		</div>
 	);

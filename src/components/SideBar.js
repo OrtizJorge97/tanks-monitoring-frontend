@@ -77,7 +77,7 @@ export default function SideBar(props) {
             break;
           case 'Visualization':
             icon = <EqualizerIcon />
-            to = "/bar-chart";
+            to = "/tanks-monitor";
             break;
           case 'Historic':
             icon = <TimelineIcon />

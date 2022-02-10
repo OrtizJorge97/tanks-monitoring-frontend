@@ -28,7 +28,7 @@ function returnTanksOptions(userRole) {
             tanksOptions = sideBarItems.tanksOptions
             break;
         case roles.OPERATOR:
-            tanksOptions = null;
+            tanksOptions = sideBarItems.tanksOptions;
             break;
         default:
             tanksOptions = null;

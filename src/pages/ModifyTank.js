@@ -6,6 +6,9 @@ import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import Skeleton from "@mui/material/Skeleton";
+import {
+  Link
+} from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import useInputTank from "../hooks/useInputTank";
@@ -246,6 +249,9 @@ export default function ModifyTank() {
 							<Alert severity={pageState.alertSeverity}>{pageState.msg}</Alert>
 						</div>
 					) : null}
+					<div>
+						<Link to="/tanks">Go to tanks</Link>
+					</div>
 					<div style={{ marginTop: "10px" }}>
 						<Button
 							variant='contained'

@@ -2,13 +2,16 @@ import React, { useState, useMemo, useEffect } from "react";
 import SignUp from './pages/SignUp';
 import Users from './pages/Users';
 import LogIn from "./pages/LogIn";
+import UserUpdate from './pages/UserUpdate';
 import Tanks from './pages/Tanks';
 import AddTank from './pages/AddTank';
+import Historic from './pages/Historic';
 import DetailsTank from "./pages/DetailsTank";
-import Button from '@mui/material/Button';
-import BarChart from "./pages/BarChart";
+import TanksMonitor from "./pages/TanksMonitor";
 import NavBar from "./components/NavBar";
 import Profile from "./pages/Profile";
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 //import { ThemeProvider } from "./ThemeContext";
 import { UserContext, NavigationContext, TankContext } from './components/Context';
 
@@ -59,13 +62,15 @@ function App() {
             <Routes>
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/log-in" element={<LogIn/>} />
-              <Route path="/bar-chart" element={<BarChart/>} />
+              <Route path="/tanks-monitor" element={<TanksMonitor/>} />
               <Route path="/profile" element={<Profile/>} />
               <Route path="/users" element={<Users/>} />
               <Route path="/tanks" element={<Tanks/>} />
               <Route path="/add-tank" element={<AddTank/>} />
               <Route path="/modify-tank" element={<ModifyTank/>} />
               <Route path="/details-tank" element={<DetailsTank/>} />
+              <Route path="/historic" element={<LocalizationProvider dateAdapter={AdapterDateFns}><Historic/></LocalizationProvider>} />
+              <Route path="/update-user" element={<UserUpdate/>} />
             </Routes>
           </TankContext.Provider>
         </UserContext.Provider>

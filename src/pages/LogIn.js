@@ -110,6 +110,7 @@ export default function LogInPage() {
         console.log(userAuthenticated);
         if(userAuthenticated) {
           localStorage.setItem("accessToken", jsonData.access_token);
+          localStorage.setItem("email", jsonData.user.email);
           localStorage.setItem("refreshToken", jsonData.refresh_token);
           localStorage.setItem("name", jsonData.user.name);
           localStorage.setItem("lastName", jsonData.user.last_name);
@@ -124,17 +125,8 @@ export default function LogInPage() {
             progressVisibility: "none",
             disabledButton: false
           }); 
-          navigate("/bar-chart");
+          navigate("/tanks-monitor");
         }
-        /*
-        if(!userAuthenticated) {
-          setBusyProps({
-            progressVisibility: "none",
-            disabledButton: false
-          }); 
-        }*/
-
-        
       }
       else {
         setBusyProps({
@@ -169,10 +161,11 @@ export default function LogInPage() {
           marginRight: "auto",
           backgroundColor: ""
         }}> 
-        {/** 
-        <h1>Log In jorge.ortiz.c97@gmail.com</h1>
-        <h1>AtomoEstable97</h1>
-        */}
+        
+        <span>jorge.ortiz.c97@gmail.com</span>
+        <br/>
+        <span>AtomoEstable97</span>
+        
         <h1 style={{fontSize: "50px"}}>Log In</h1>
         <div style={{marginBottom: "10px"}}>
             <TextField 
