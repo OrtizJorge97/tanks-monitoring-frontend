@@ -27,6 +27,10 @@ export default function Historic() {
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [socket, setSocket] = useState(null);
+  const [datesRange, setDatesRange] = useState({
+    startDate: new Date(),
+    endDate: new Date()
+  });
   const [tanks, setTanks] = useState([]); //data for the select control which comes from backend to display all tanks available
   const [tank, setTank] = useState(null); //tankSelected
   const [data, setData, doFetch] = useFetch([]);
@@ -81,6 +85,40 @@ export default function Historic() {
   };
   const selectedTankHandle = (e) => {
 	  setTank(e.target.value);
+  }
+  const handleDateRangeChange = (e, prop) => {
+    let value = e.target.value;
+    let property = prop;
+
+    setDatesRange(oldDatesRanges => {
+      let newDatesRanges = {};
+      let errorMessage = ""
+      if(property === 'startDate' && value > oldDatesRanges.endDate) {
+        errorMessage = 'Start Date cannot be greater than End Date.';
+        newDatesRanges = {
+          ...oldDatesRanges,
+          [property]: oldDatesRanges.startDate
+        };
+      }
+      else if(property === 'endDate' && value < oldDatesRanges.startDate) {
+        errorMessage = 'End Date cannot be smaller than Start Date.';
+        newDatesRanges = {
+          ...oldDatesRanges,
+          [property]: oldDatesRanges.endDate
+        };
+      }
+      else {
+        newDatesRanges = {
+          ...oldDatesRanges,
+          [property]: value
+        };
+      }
+      if(errorMessage) {
+        alert(errorMessage);
+      }
+      return newDatesRanges
+      
+    })
   }
 
   const updateHistoricData = async (paramData) => {
@@ -172,6 +210,7 @@ export default function Historic() {
       }}
       autoComplete="off"
     >
+      <h1 style={{ color: "black", fontWeight: 600 }}>Historic Data</h1>
       {tank ? (
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">Select Tank</InputLabel>
@@ -188,18 +227,33 @@ export default function Historic() {
           </Select>
         </FormControl>
       ) : null}
-      <TextField
-        id="date"
-        label="Start Date"
-        type="date"
-        defaultValue="2022-02-03"
-        sx={{ width: 220 }}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-      <h1 style={{ color: "black" }}>Historic page we</h1>
-      <HistoricalChart data={data} tankSelected={tank}/>
+      <div style={{marginTop: "20px", marginBottom: "20px"}}>
+        <TextField
+          id="date"
+          label="Start Date"
+          type="date"
+          defaultValue="2022/02/03"
+          sx={{ width: 220 }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          value={datesRange.startDate}
+          onChange={e => handleDateRangeChange(e, 'startDate')}
+        />
+        <TextField
+          id="date"
+          label="End Date"
+          type="date"
+          defaultValue="2022/02/03"
+          sx={{ width: 220 }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          value={datesRange.endDate}
+          onChange={e => handleDateRangeChange(e, 'endDate')}
+        />
+      </div>
+      <HistoricalChart data={data} tankSelected={tank} datesRange={datesRange}/>
       <Snackbar
         open={open}
         autoHideDuration={3000}
