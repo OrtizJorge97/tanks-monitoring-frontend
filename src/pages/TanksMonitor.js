@@ -16,7 +16,7 @@ import useFetch from "../hooks/useFetch";
 import { GET } from "../api/Get";
 import ChartComponent from "../components/ChartComponent";
 import { socketApiRoute } from "../api/ApiProperties";
-import { UserContext } from "../components/Context";
+import { UserContext, NavigationContext } from "../components/Context";
 import { apiModes } from "../api/ApiProperties";
 import TanksList from "../components/TanksList";
 
@@ -42,6 +42,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 function BarChart() {
 	document.title = "Visualization";
 	const navigate = useNavigate();
+	const {navigation, setNavigation} = React.useContext(NavigationContext);
 	const { user, setUser } = useContext(UserContext);
 	const [open, setOpen] = useState(false);
 	const [tanksSelected, setTanksSelected] = useState([]);
@@ -106,12 +107,13 @@ function BarChart() {
 			console.log("message from server conection: " + msj.message);
 		});
 		socket.on('tanks_data', (data) => {
-			console.log("----FROM SERVER TANKS DATA------")
+			console.log("----FROM SOCKET TANKS DATA------")
+			console.log(data)
 			setTanksData({
 				id: data.id,
 				company: data.company,
 				WtrLvl: data.WtrLvl,
-				OxPercentage: data.OxPercentage,
+				OxPercentage: data.OxygenPercentage,
 				Ph: data.Ph,
 			});
 		});
@@ -133,6 +135,10 @@ function BarChart() {
 	};
 
 	useEffect(() => {
+		setNavigation({
+			...navigation,
+			currentPage: "Monitor Tanks"
+		});
 		var socket = null;
 		async function stablishConnection() {
 			try {

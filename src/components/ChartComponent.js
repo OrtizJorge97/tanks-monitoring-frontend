@@ -40,7 +40,8 @@ export default function ChartComponent(props) {
 		let oxygenPercentage = [];
 		let ph = [];
 		let dataToDisplay = null;
-
+		console.log("PRINTING TANKS DATA")
+		console.log(tanksData)
 		tanksSelected.forEach((item, index) => {
 			let tankSelectedIndex = tanksData.id.indexOf(item);
 			if (tankSelectedIndex !== -1) {

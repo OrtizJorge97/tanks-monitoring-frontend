@@ -11,7 +11,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
 import useFetch from "../hooks/useFetch";
-import { UserContext } from "../components/Context";
+import { UserContext, NavigationContext } from "../components/Context";
 import { GET } from "../api/Get";
 import { apiModes } from "../api/ApiProperties";
 
@@ -66,6 +66,7 @@ function stringAvatar(name) {
 
 export default function Profile() {
 	const { user, setUser } = React.useContext(UserContext);
+	const {navigation, setNavigation} = React.useContext(NavigationContext);
 	const [open, setOpen] = useState(false);
 	const navigate = useNavigate();
 	document.title = "User";
@@ -90,6 +91,10 @@ export default function Profile() {
 	};
 
 	useEffect(() => {
+		setNavigation({
+			...navigation,
+			currentPage: "Profile"
+		});
 		async function getUser() {
 			try {
 				const jsonData = await doFetch("GET", apiModes.GETUSER, true, {

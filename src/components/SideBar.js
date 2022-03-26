@@ -14,6 +14,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
 import TimelineIcon from '@mui/icons-material/Timeline';
+import HomeIcon from '@mui/icons-material/Home';
 import {
     Link
 } from "react-router-dom";
@@ -71,9 +72,9 @@ export default function SideBar(props) {
             icon = <AccountCircleIcon />
             to = "/profile";
             break;
-          case 'Collaborators':
-            icon = <ConnectWithoutContactIcon />
-            to = "/collaborators";
+          case 'Home':
+            icon = <HomeIcon />
+            to = "/";
             break;
           case 'Visualization':
             icon = <EqualizerIcon />

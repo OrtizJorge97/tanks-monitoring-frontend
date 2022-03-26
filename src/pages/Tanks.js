@@ -34,6 +34,7 @@ const rowsDummy = [
 
 export default function Tanks() {
 	const navigate = useNavigate();
+	const {navigation, setNavigation} = React.useContext(NavigationContext);
 	const { user, setUser } = React.useContext(UserContext);
 	const { tankContextData, setTankContextData } = React.useContext(TankContext);
 	const [rows, setRows, doFetch] = useFetch(rowsDummy);
@@ -188,6 +189,10 @@ export default function Tanks() {
 	}
 
 	useEffect(() => {
+		setNavigation({
+            ...navigation,
+            currentPage: "Tanks List"
+        });
 		fetchTanks();
 	}, []);
 

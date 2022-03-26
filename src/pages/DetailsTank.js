@@ -68,7 +68,7 @@ export default function DetailsTank() {
 		if (tankIndex > -1) {
 			setTank({
 				WtrLvl: data.WtrLvl[tankIndex],
-				OxygenPercentage: data.OxPercentage[tankIndex],
+				OxygenPercentage: data.OxygenPercentage[tankIndex],
 				Ph: data.Ph[tankIndex],
 			});
 		}

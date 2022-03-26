@@ -9,9 +9,11 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import useFetch from "../hooks/useFetch";
 import { apiModes } from "../api/ApiProperties";
+import { UserContext, NavigationContext } from "../components/Context";
 import ConfirmationModalUsers from "../components/users/ConfirmationModalUsers";
 
 export default function Users() {
+	const {navigation, setNavigation} = React.useContext(NavigationContext);
 	const navigate = useNavigate();
 	const [open, setOpen] = useState(false);
 	const [componentState, setComponentState] = useState({
@@ -130,6 +132,10 @@ export default function Users() {
 		} catch (error) { }
 	};
 	useEffect(() => {
+		setNavigation({
+			...navigation,
+			currentPage: "Users"
+		});
 		fetchUsers();
 	}, []);
 	return (
@@ -144,7 +150,7 @@ export default function Users() {
 				borderRadius: "10px",
 				backgroundColor: "rgba(0, 0, 0, 0)",
 			}}>
-			<h1 style={{ textAlign: "center" }}>Users page ue</h1>
+			<h1 style={{ textAlign: "center", fontWeight: 600 }}>Users</h1>
 
 			<DataGrid
 				rows={users.map((item, index) => {

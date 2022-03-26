@@ -16,11 +16,12 @@ import Box from '@mui/material/Box';
 import {isValidEmail, isValidPassword} from '../utility/Accounts';
 import useFetch from "../hooks/useFetch";
 import { apiModes } from '../api/ApiProperties';
-import { UserContext } from '../components/Context';
+import { UserContext, NavigationContext } from '../components/Context';
 
 
 export default function LogInPage() {
   const {user, setUser} = React.useContext(UserContext);
+  const {navigation, setNavigation} = React.useContext(NavigationContext);
 
   const navigate = useNavigate();
   document.title = "Log In";
@@ -99,6 +100,9 @@ export default function LogInPage() {
         else if(jsonData.msg === "User not found") {
           responseMsgTextColor = "#940303";
         }
+        else if (jsonData.msg === "Account has not been activated, please check your email for confirming your account.") {
+          responseMsgTextColor = "#940303";
+        }
         responseTextMessage = jsonData.msg;
           
         setBusyProps({
@@ -148,6 +152,13 @@ export default function LogInPage() {
 
   };
 
+  React.useEffect(() => {
+    setNavigation({
+      ...navigation,
+      currentPage: "Log In"
+    })
+  }, [])
+
   return (
     <div style={{textAlign: "center", marginTop: "90px", paddingTop: "50px"}}>
       <Box
@@ -161,10 +172,6 @@ export default function LogInPage() {
           marginRight: "auto",
           backgroundColor: ""
         }}> 
-        
-        <span>jorge.ortiz.c97@gmail.com</span>
-        <br/>
-        <span>AtomoEstable97</span>
         
         <h1 style={{fontSize: "50px"}}>Log In</h1>
         <div style={{marginBottom: "10px"}}>

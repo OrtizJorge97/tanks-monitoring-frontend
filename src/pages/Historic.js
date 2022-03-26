@@ -13,7 +13,7 @@ import socketIOClient from "socket.io-client";
 
 import HistoricalChart from "../components/historical/HistoricalChart";
 import { Line } from "react-chartjs-2";
-import { UserContext } from "../components/Context";
+import { UserContext, NavigationContext } from "../components/Context";
 import { socketApiRoute } from "../api/ApiProperties";
 import { apiModes } from "../api/ApiProperties";
 import useFetch from "../hooks/useFetch";
@@ -25,6 +25,7 @@ const tankSelectedDummy = "MT002";
 
 export default function Historic() {
   const { user, setUser } = useContext(UserContext);
+  const {navigation, setNavigation} = React.useContext(NavigationContext);
   const navigate = useNavigate();
   const [socket, setSocket] = useState(null);
   const [datesRange, setDatesRange] = useState({
@@ -161,6 +162,10 @@ export default function Historic() {
   }
 
   useEffect(() => {
+    setNavigation({
+      ...navigation,
+      currentPage: "Historic Visualization"
+    });
     var socket = null;
     const stablishConnection = async () => {
       try {

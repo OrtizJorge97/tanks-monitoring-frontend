@@ -22,6 +22,7 @@ import {
   Link
 } from "react-router-dom";
 import ModifyTank from "./pages/ModifyTank";
+import Home from "./pages/Home";
 
 function App() {
   const [navigation, setNavigation] = useState({
@@ -60,6 +61,7 @@ function App() {
           <TankContext.Provider value={providerTank}>
             <NavBar />
             <Routes>
+              <Route path="/" element={<LogIn/>} />
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/log-in" element={<LogIn/>} />
               <Route path="/tanks-monitor" element={<TanksMonitor/>} />

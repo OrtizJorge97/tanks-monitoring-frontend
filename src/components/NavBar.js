@@ -74,6 +74,15 @@ export default function NavBar() {
           {(user.access_token || localStorage.getItem("accessToken")) ? (
             <React.Fragment>
               <Button 
+                onClick={() => setNavigation({
+                  ...navigation,
+                  currentPage: "Home"
+                })} 
+                style={buttonStyle} 
+                color="inherit">
+                <Link to="/" style={linkStyle}>Home</Link>
+              </Button>
+              <Button 
                 color="inherit"
                 onClick={() => {
                   localStorage.setItem("accessToken", "");
@@ -91,6 +100,15 @@ export default function NavBar() {
             </React.Fragment>
           ) : (
             <React.Fragment>
+              <Button 
+                onClick={() => setNavigation({
+                  ...navigation,
+                  currentPage: "Home"
+                })} 
+                style={buttonStyle} 
+                color="inherit">
+                <Link to="/" style={linkStyle}>Home</Link>
+              </Button>
               <Button 
                 onClick={() => setNavigation({
                   ...navigation,

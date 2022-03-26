@@ -8,7 +8,7 @@ const roles = {
 
 const sideBarItems = {
     visualizationOptions: ['Visualization', 'Historic'],
-    userOptions: ['Profile', 'Collaborators', 'Users'],
+    userOptions: ['Home', 'Profile', 'Users'],
     tanksOptions: ['Tanks']
 };
 
