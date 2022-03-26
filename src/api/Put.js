@@ -1,9 +1,9 @@
 import { apiModes, BuildUrl } from "./ApiProperties";
 
-async function POST(apiMode, authorization=false, payload) {
+async function PUT(apiMode, authorization=false, payload) {
     var url = BuildUrl(apiMode);
     var options = {
-        method: 'POST',
+        method: 'PUT',
         mode: 'cors',
         headers: {
             'Content-Type': 'application/json'
@@ -16,10 +16,11 @@ async function POST(apiMode, authorization=false, payload) {
             'Authorization': `Bearer ${payload.accessToken}`
         };
     }
-    console.log("url:  " + url);
-    console.log(payload);
+    console.log("----------PUT OPTIONS----------");
+    console.log(options);
+    console.log(url);
     var response = await fetch(url, options);
     return response;
 }
 
-export { POST };
+export { PUT };

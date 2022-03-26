@@ -1,9 +1,9 @@
 import { apiModes, BuildUrl } from "./ApiProperties";
 
-async function POST(apiMode, authorization=false, payload) {
+async function DELETE(apiMode, authorization=false, payload) {
     var url = BuildUrl(apiMode);
     var options = {
-        method: 'POST',
+        method: 'DELETE',
         mode: 'cors',
         headers: {
             'Content-Type': 'application/json'
@@ -16,10 +16,10 @@ async function POST(apiMode, authorization=false, payload) {
             'Authorization': `Bearer ${payload.accessToken}`
         };
     }
-    console.log("url:  " + url);
-    console.log(payload);
+    console.log("----------DELETE OPTIONS----------");
+    console.log(options);
     var response = await fetch(url, options);
     return response;
 }
 
-export { POST };
+export { DELETE };

@@ -11,25 +11,28 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 import {isValidEmail, isValidPassword} from '../utility/Accounts';
-import {POST} from "../api/Post";
+import useFetch from "../hooks/useFetch";
 import { apiModes } from '../api/ApiProperties';
-import { UserContext } from '../components/Context';
+import { UserContext, NavigationContext } from '../components/Context';
 
 
 export default function LogInPage() {
   const {user, setUser} = React.useContext(UserContext);
+  const {navigation, setNavigation} = React.useContext(NavigationContext);
 
   const navigate = useNavigate();
   document.title = "Log In";
-  const [values, setValues] = React.useState({
+  const [values, setValues, doFetch] = useFetch({
     password: '',
     emailText: '',
     showPassword: false,
     emailError: "",
     passwordError: ""
   });
+
   const [validFields, setValidFields] = React.useState({
     validEmail: true,
     validPassword: true
@@ -66,7 +69,8 @@ export default function LogInPage() {
       let responseTextMessage = "";
       let responseMsgTextColor = "#000000";
       let userAuthenticated = false;
-      
+      console.log("LOG TO UPLOAD PROJECT IN OTHER BRANCH");
+      console.log("COMMIT FOR DEV DEV")
       setValues({
         ...values,
         emailError: emailError,
@@ -79,25 +83,27 @@ export default function LogInPage() {
 
       if(!emailError && !passwordError) {
         console.log(values.password);
-        response = await POST(apiModes.LOGIN,
-                              {email: values.emailText, 
-                              password: values.password});
-        const jsonData = await response.json();
+        const jsonData = await doFetch("POST", apiModes.LOGIN, false,
+                                      {email: values.emailText, 
+                                      password: values.password});
         console.log(jsonData);
         //check if server responded and if status was successful
-        if(response && response.status === 200) {
-          if(jsonData.message === "Succesfully authenticated") {
-            responseMsgTextColor = "#03945f";
-            userAuthenticated = true;
-          }
-          else if(jsonData.message === "Password incorect") {
-            responseMsgTextColor = "#940303";
-          }
+        
+        if(jsonData.msg === "Succesfully authenticated") {
+          responseMsgTextColor = "#03945f";
+          userAuthenticated = true;
         }
-        if(response && response.status === 404) {
+        else if(jsonData.msg === "Password incorect") {
           responseMsgTextColor = "#940303";
         }
-        responseTextMessage = jsonData.message;
+        
+        else if(jsonData.msg === "User not found") {
+          responseMsgTextColor = "#940303";
+        }
+        else if (jsonData.msg === "Account has not been activated, please check your email for confirming your account.") {
+          responseMsgTextColor = "#940303";
+        }
+        responseTextMessage = jsonData.msg;
           
         setBusyProps({
           progressVisibility: "none",
@@ -105,13 +111,15 @@ export default function LogInPage() {
           responseTextMessage: responseTextMessage,
           responseMsgTextColor: responseMsgTextColor
         });
-
+        console.log(userAuthenticated);
         if(userAuthenticated) {
           localStorage.setItem("accessToken", jsonData.access_token);
+          localStorage.setItem("email", jsonData.user.email);
           localStorage.setItem("refreshToken", jsonData.refresh_token);
           localStorage.setItem("name", jsonData.user.name);
           localStorage.setItem("lastName", jsonData.user.last_name);
           localStorage.setItem("company", jsonData.user.company);
+          localStorage.setItem("role", jsonData.user.role);
 
           setUser({
             ...user,
@@ -121,17 +129,8 @@ export default function LogInPage() {
             progressVisibility: "none",
             disabledButton: false
           }); 
-          navigate("/bar-chart");
+          navigate("/tanks-monitor");
         }
-
-        if(!userAuthenticated) {
-          setBusyProps({
-            progressVisibility: "none",
-            disabledButton: false
-          }); 
-        }
-
-        
       }
       else {
         setBusyProps({
@@ -141,33 +140,56 @@ export default function LogInPage() {
       }
     }
     catch(error) {
-      console.log(typeof(error));
-      console.log(error.message);
       if(error.message === 'Failed to fetch') {
         setBusyProps({
           progressVisibility: "none",
           disabledButton: false,
           responseTextMessage: "Please check your internet connection and try again",
           responseMsgTextColor: ""
-        })
+        });
       }
     }
 
   };
 
+  React.useEffect(() => {
+    setNavigation({
+      ...navigation,
+      currentPage: "Log In"
+    })
+  }, [])
+
   return (
-    <div style={{textAlign: "center", marginTop: "90px"}}> 
-        <h1>Log In jorge.ortiz.c97@gmail.com</h1>
-        <h1>AtomoEstable97</h1>
+    <div style={{textAlign: "center", marginTop: "90px", paddingTop: "50px"}}>
+      <Box
+        sx={{
+          borderRadius: "20px",
+          width: "70%",
+          height: "auto",
+          paddingTop: "20px",
+          paddingBottom: "20px",
+          marginLeft: "auto",
+          marginRight: "auto",
+          backgroundColor: ""
+        }}> 
+        
+        <h1 style={{fontSize: "50px"}}>Log In</h1>
         <div style={{marginBottom: "10px"}}>
             <TextField 
-                style={{width: "60%"}}
+                style={{
+                  width: "60%"
+                }}
                 id="outlined-basic" 
                 label="Email" 
                 variant="outlined"
                 type="text"
                 value={values.emailText}
                 onChange={(e) => handleChange(e, "emailText")}
+                onKeyUp={(e) => {
+                  if(e.code === 'Enter') {
+                    handleLogin(e);
+                  }
+                }}  
              />
         </div>
         <div style={{width: "60%", margin: "auto", marginBottom: "10px"}}>
@@ -181,14 +203,18 @@ export default function LogInPage() {
                 type={values.showPassword ? 'text' : 'password'}
                 value={values.password}
                 onChange={(e) => handleChange(e, 'password')}
+                onKeyUp={(e) => {
+                  if(e.code === 'Enter') {
+                    handleLogin(e);
+                  }
+                }}
                 endAdornment={
                 <InputAdornment position="end">
                     <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={(e) => handleMouseDownPassword(e)}
-                    edge="end"
-                    >
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={(e) => handleMouseDownPassword(e)}
+                      edge="end">
                     {values.showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                 </InputAdornment>
@@ -220,14 +246,18 @@ export default function LogInPage() {
         <div style={{marginBottom: "15px"}}>
             <Button 
               disabled={busyProps.disabledButton} 
-              style={{width: "40%"}} 
+              sx={{
+                width: "40%",
+                borderRadius: "20px",
+                backgroundColor: "#54008c"
+              }}
               onClick={(e) => handleLogin(e)} 
               variant="contained">
                 Log In
               </Button>
         </div>
         <a href="#">Forgot password?</a>
-
+      </Box>
     </div>
   );
 }
