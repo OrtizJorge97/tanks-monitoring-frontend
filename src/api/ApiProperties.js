@@ -3,6 +3,7 @@ const apiRoute = "http://192.168.100.22:5000";
 const socketApiRoute = "http://192.168.100.22:5000/private";
 const apiModes = {
 	LOGIN: "login",
+	RESEND_CONFIRMATION_EMAIL: "resend_confirmation_email",
 	SIGNUP: "signup",
 	GETUSER: "getuser",
 	FETCHTANKS: "fetchtanks",
@@ -58,6 +59,9 @@ function BuildUrl(mode) {
 			break;
 		case apiModes.FETCHHISTORIC:
 			urlResult = `${apiRoute}/api/fetch-historic`;
+			break;
+		case apiModes.RESEND_CONFIRMATION_EMAIL:
+			urlResult = `${apiRoute}/auth/resend-confirmation-email`;
 			break;
 		default:
 			urlResult = "";
